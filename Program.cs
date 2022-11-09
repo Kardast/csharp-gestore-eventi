@@ -13,89 +13,23 @@ Console.WriteLine("Hello, World!");
 
 //creare classe eccezioni gestoreEventiEccezioni
 
+Console.WriteLine("inserisci nome evento");
+string nomeEvento = Console.ReadLine();
 
+Console.WriteLine("inserisci data evento (gg/mm/yyyy)");
+DateOnly dataEvento = DateOnly.Parse((Console.ReadLine()));
 
-public class Evento
-{
-    //attributi
-    private string _titolo;
-    private DateTime _data;
+Console.WriteLine("inserisci numero posti max evento");
+int postiMaxEvento = Convert.ToInt32(Console.ReadLine());
 
-    //properties
-    public string Titolo
-    {
-        get
-        {
-            return _titolo;
-        }
-        set
-        {
-            if (_titolo != "")
-            {
-                _titolo = value;
-            }
-        }
-    }
-    public DateTime Data
-    {
-        get
-        {
-            return _data;
-        }
-        set
-        {
-            if (_data >= DateTime.Now)
-            {
-                _data = value;
-            }
-        }
-    }
-    public int PostiMaxEvento{ get; }
-    public int PostiPrenotati { get; private set; }
+Evento evento1 = new Evento(nomeEvento, dataEvento, postiMaxEvento);
 
-    //construttore
-    public Evento(string _titolo, DateTime _data, int postiMaxEvento, int postiPrenotati)
-    {
-        Titolo = _titolo;
-        Data = _data;
-        if (postiMaxEvento > 0)
-        {
-            PostiMaxEvento = postiMaxEvento;
-        }
-        
-        PostiPrenotati = 0;
-    }
+Console.WriteLine("inserisci numero posti da prenotare");
+int postiDaPrenotare = Convert.ToInt32(Console.ReadLine());
+evento1.PrenotaPosti(postiDaPrenotare);
+Console.WriteLine("nome evento: {0}, data evento {1}, numero posti max: {2}, posti prenotati: {3}", evento1.Titolo, evento1.Data, evento1.PostiMax, evento1.PostiPrenotati);
 
-    //metodi
-    public int PrenotaPosti(int inputPrenota)
-    {
-        //metodo che si occuperà di gestire i posti prenotati un evento
-        if((PostiMaxEvento - PostiPrenotati) >= inputPrenota && Data >= DateTime.Now)
-        {
-            return PostiPrenotati += inputPrenota;
-        }
-        return 0;
-    }
+evento1.DisdiciPosti(postiDaPrenotare);
+Console.WriteLine("nome evento: {0}, data evento {1}, numero posti max: {2}, posti prenotati: {3}", evento1.Titolo, evento1.Data, evento1.PostiMax, evento1.PostiPrenotati);
 
-    public int DisdiciPosti(int inputDisdici)
-    {
-        //metodo che si occuperà di gestire i posti cancellati ad un evento
-        if ((PostiPrenotati - inputDisdici) >= 0 && Data >= DateTime.Now)
-        {
-            return PostiPrenotati -= inputDisdici;
-        }
-        return 0;
-    }
-
-    public override string ToString()
-    {
-        //metodo che si occuperà di ritornare una stringa dalla data dell'evento
-        return "data in stringa + titolo";
-    }
-}
-
-//classe gestore eccezioni
-public class gestoreEventiEccezioni
-{
-    //gestirà le eccezioni
-}
+Console.WriteLine(evento1.ToString());

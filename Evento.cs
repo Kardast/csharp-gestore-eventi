@@ -23,9 +23,7 @@ public class Evento
                 throw new GestoreEventiException("Il nome passato è vuoto");
                 
             }
-            {
-                _titolo = value;
-            }
+             _titolo = value;
         }
     }
     public DateOnly Data
@@ -36,10 +34,13 @@ public class Evento
         }
         set
         {
-            //if (_data >= DateOnly.FromDateTime(DateTime.Now))
-            //{
+            if (value < DateOnly.FromDateTime(DateTime.Now))
+            {
+                throw new GestoreEventiException("la data è antecedente ad oggi");
+
+            }
             _data = value;
-            //}
+
         }
     }
     public int PostiMax { get; }
@@ -50,7 +51,11 @@ public class Evento
     {
         Titolo = titolo;
         Data = data;
-        if (postiMax > 0)
+        if (postiMax < 0)
+        {
+            throw new GestoreEventiException("hai inserito un numero negativo");
+        }
+        else
         {
             PostiMax = postiMax;
         }

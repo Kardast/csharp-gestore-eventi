@@ -35,73 +35,63 @@ Console.WriteLine("Hello, World!");
 //}
 
 
-ProgrammaEventi programmaEventi = new ProgrammaEventi("Programma Eventi");
+//ProgrammaEventi programmaEventi = new ProgrammaEventi("Programma Eventi");
 
-programmaEventi.AggiungiEvento(new Evento("concerto di Ika", DateOnly.Parse("24/03/2023"), 150));
-programmaEventi.AggiungiEvento(new Evento("concerto di Sandro", DateOnly.Parse("27/03/2023"), 80));
-programmaEventi.AggiungiEvento(new Evento("concerto di Paolo", DateOnly.Parse("24/03/2023"), 150));
-
-void funzioneCase()
-{
-    Console.WriteLine("Vuoi fare altro? [si/no]");
-    string inputUno = Console.ReadLine();
-    if (inputUno == "si")
-    {
-        gestoreCasi();
-    }
-}
+//programmaEventi.AggiungiEvento(new Evento("concerto di Ika", DateOnly.Parse("24/03/2023"), 150));
+//programmaEventi.AggiungiEvento(new Evento("concerto di Sandro", DateOnly.Parse("27/03/2023"), 80));
+//programmaEventi.AggiungiEvento(new Evento("concerto di Paolo", DateOnly.Parse("24/03/2023"), 150));
 
 try
 {
-    gestoreCasi();
-    //Console.WriteLine(evento1.ToString());
+    Console.WriteLine("Per creare un nuovo programma di eventi inserire nome:");
+    string nomeProgrammaEvento = Console.ReadLine();
+    ProgrammaEventi programmaEventiUser = new ProgrammaEventi(nomeProgrammaEvento);
+
+    Console.WriteLine("Quanti eventi vuoi aggiungere?");
+    int numeroEventi = Convert.ToInt32(Console.ReadLine());
+
+    for (int i = 0; i < numeroEventi; i++)
+    {
+        Console.WriteLine("Per creare un nuovo evento inserire nome evento:");
+        string nomeEvento = Console.ReadLine();
+
+        Console.WriteLine("Inserire data evento (gg/mm/yyyy)");
+        DateOnly dataEvento = DateOnly.Parse((Console.ReadLine()));
+
+        Console.WriteLine("Inserire numero posti max evento");
+        int postiMaxEvento = Convert.ToInt32(Console.ReadLine());
+
+        Evento newEvento = new Evento(nomeEvento, dataEvento, postiMaxEvento);
+        programmaEventiUser.AggiungiEvento(newEvento);
+        Console.WriteLine("nome evento: {0} \n data evento: {1} \n numero posti max: {2} \n posti prenotati: {3} \n posti rimanenti: {4}", newEvento.Titolo, newEvento.Data, newEvento.PostiMax, newEvento.PostiPrenotati, (newEvento.PostiMax - newEvento.PostiPrenotati));
+    }
+
+    menu(programmaEventiUser);
 }
 catch (GestoreEventiException e)
 {
     Console.WriteLine(e.ToString());
 }
 
-void gestoreCasi()
+void menu(ProgrammaEventi programmaEventi)
 {
     Console.WriteLine("Seleziona l'azione");
-    Console.WriteLine("1: Aggiungi evento");
-    Console.WriteLine("2: Prenota posti");
-    Console.WriteLine("3: Ricerca eventi per data");
-    Console.WriteLine("4: Disdici prenotazioni");
-    Console.WriteLine("5: Visualizza tutti gli eventi");
-    Console.WriteLine("6: Visualizza numero totale di eventi");
-    Console.WriteLine("7: Svuota la lista eventi");
-    Console.WriteLine("8: Stampa un programma eventi");
-
-
+    Console.WriteLine("1: Prenota posti");
+    Console.WriteLine("2: Ricerca eventi per data");
+    Console.WriteLine("3: Disdici prenotazioni");
+    Console.WriteLine("4: Visualizza tutti gli eventi");
+    Console.WriteLine("5: Visualizza numero totale di eventi");
+    Console.WriteLine("6: Svuota lista");
+    Console.WriteLine("7: Stampa un programma eventi");
     int action = Convert.ToInt32(Console.ReadLine());
 
     switch (action)
     {
         case 1:
-            //aggiungi evento
-            Console.WriteLine("Per creare un nuovo evento inserire nome evento:");
-            string nomeEvento = Console.ReadLine();
-
-            Console.WriteLine("Inserire data evento (gg/mm/yyyy)");
-            DateOnly dataEvento = DateOnly.Parse((Console.ReadLine()));
-
-            Console.WriteLine("Inserire numero posti max evento");
-            int postiMaxEvento = Convert.ToInt32(Console.ReadLine());
-
-            Evento newEvento = new Evento(nomeEvento, dataEvento, postiMaxEvento);
-            programmaEventi.AggiungiEvento(newEvento);
-            Console.WriteLine("nome evento: {0} \n data evento: {1} \n numero posti max: {2} \n posti prenotati: {3} \n posti rimanenti: {4}", newEvento.Titolo, newEvento.Data, newEvento.PostiMax, newEvento.PostiPrenotati, (newEvento.PostiMax - newEvento.PostiPrenotati));
-
-            funzioneCase();
-            break;
-
-        case 2:
             //prenota posti
             Console.WriteLine("Inserisci data evento (gg/mm/yyyy)");
             DateOnly dataEventoRicerca = DateOnly.Parse((Console.ReadLine()));
-            programmaEventi.ListaEventiPerData(dataEventoRicerca);
-
+            ProgrammaEventi.ListaEventi(programmaEventi.ListaEventiPerData(dataEventoRicerca));
             Console.WriteLine("Per quale evento ti vuoi prenotare? Inserisci titolo");
             string ricercaEvento = Console.ReadLine();
             Console.WriteLine("Quanti posti vuoi prenotare?");
@@ -115,23 +105,28 @@ void gestoreCasi()
                     Console.WriteLine("nome evento: {0} \n data evento: {1} \n numero posti max: {2} \n posti prenotati: {3} \n posti rimanenti: {4}", evento.Titolo, evento.Data, evento.PostiMax, evento.PostiPrenotati, (evento.PostiMax - evento.PostiPrenotati));
                 }
             }
-            funzioneCase();
+
+            funzioneCase(programmaEventi);
+
+            break;
+
+        case 2:
+            //ricerca eventi per data
+            Console.WriteLine("Inserisci data evento (gg/mm/yyyy)");
+            DateOnly dataRicerca = DateOnly.Parse((Console.ReadLine()));
+            List<Evento> listaFlitrata = programmaEventi.ListaEventiPerData(dataRicerca);
+            ProgrammaEventi.ListaEventi(listaFlitrata);
+
+
+            funzioneCase(programmaEventi);
+
             break;
 
         case 3:
-            //stampa lista per data
-            Console.WriteLine("Inserisci data evento (gg/mm/yyyy)");
-            DateOnly dataRicerca = DateOnly.Parse((Console.ReadLine()));
-            programmaEventi.ListaEventiPerData(dataRicerca);
-            funzioneCase();
-            break;
-
-        case 4:
             //disdici prenotazioni
             Console.WriteLine("Inserisci data evento (gg/mm/yyyy)");
             DateOnly dataEventoRicerca2 = DateOnly.Parse((Console.ReadLine()));
-            programmaEventi.ListaEventiPerData(dataEventoRicerca2);
-
+            ProgrammaEventi.ListaEventi(programmaEventi.ListaEventiPerData(dataEventoRicerca2));
             Console.WriteLine("Per quale evento vuoi rimuovere prenotazioni? Inserisci titolo");
             string ricercaEvento2 = Console.ReadLine();
 
@@ -142,8 +137,8 @@ void gestoreCasi()
                     while (evento.PostiPrenotati > 0)
                     {
                         Console.WriteLine("Vuoi disdire prenotazioni? [si/no]");
-                        string input = Console.ReadLine();
-                        if (input == "si")
+                        string inputDisdire = Console.ReadLine();
+                        if (inputDisdire == "si")
                         {
                             Console.WriteLine("Quante prenotazioni vuoi disdire?");
                             int postiDaDisdire = Convert.ToInt32(Console.ReadLine());
@@ -165,31 +160,42 @@ void gestoreCasi()
                     }
                 }
             }
-            funzioneCase();
+
+            funzioneCase(programmaEventi);
+
+            break;
+
+        case 4:
+            //stampa tutti gli eventi
+            ProgrammaEventi.ListaEventi(programmaEventi.Eventi);
+            funzioneCase(programmaEventi);
             break;
 
         case 5:
-            //lista totale eventi
-            ProgrammaEventi.ListaEventi(programmaEventi.Eventi);
-            funzioneCase();
+            //stampa totale eventi
+            programmaEventi.NumeroEventi();
+            funzioneCase(programmaEventi);
             break;
 
         case 6:
-            //conta eventi
-            programmaEventi.NumeroEventi();
-            funzioneCase();
+            //svuota lista eventi
+            programmaEventi.SvuotaLista();
+            funzioneCase(programmaEventi);
             break;
 
         case 7:
-            //svuota lista
-            programmaEventi.SvuotaLista();
-            funzioneCase();
-            break;
-
-        case 8:
-            //programma eventi
+            //stampa programma eventi
             programmaEventi.NomeProgrammaEventi(programmaEventi);
-            funzioneCase();
+            funzioneCase(programmaEventi);
             break;
+    }
+}
+void funzioneCase(ProgrammaEventi programmaEventi)
+{
+    Console.WriteLine("Vuoi fare altro? [si/no]");
+    string inputUno = Console.ReadLine();
+    if (inputUno == "si")
+    {
+        menu(programmaEventi);
     }
 }

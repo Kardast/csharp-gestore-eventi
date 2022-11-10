@@ -18,16 +18,18 @@ public class ProgrammaEventi
         Eventi.Add(evento);
     }
 
-    public void ListaEventiPerData(DateOnly dataScelta)
+    public List<Evento> ListaEventiPerData(DateOnly dataScelta)
     {
         Console.WriteLine("Gli eventi disponibili nella data scelta sono:");
+        List<Evento> listaEventiFiltrati = new List<Evento>();
         foreach (Evento evento in Eventi)
         {
             if (dataScelta == evento.Data)
             {
-                Console.WriteLine(evento.Titolo);
+                listaEventiFiltrati.Add(evento);
             }
         }
+        return listaEventiFiltrati;
     }
 
     //lista eventi
@@ -65,7 +67,7 @@ public class ProgrammaEventi
     public void NomeProgrammaEventi(ProgrammaEventi programmaEventi)
     {
         Console.WriteLine();
-        Console.WriteLine("Nome programma eventi" + programmaEventi.Titolo);
+        Console.WriteLine("Nome programma eventi: " + programmaEventi.Titolo);
         foreach (Evento evento in Eventi)
         {
             Console.WriteLine(evento.ToString());

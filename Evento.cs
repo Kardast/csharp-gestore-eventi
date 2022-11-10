@@ -93,6 +93,6 @@ public class Evento
     public override string ToString()
     {
         //metodo che si occuperà di ritornare una stringa dalla data dell'evento
-        return Data + " - " + Titolo;
+        return Data.ToString("dd/MM/yyyy") + " - " + Titolo;
     }
 }

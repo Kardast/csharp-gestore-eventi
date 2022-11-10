@@ -20,7 +20,7 @@ public class ProgrammaEventi
 
     public List<Evento> ListaEventiPerData(DateOnly dataScelta)
     {
-        Console.WriteLine("Gli eventi disponibili nella data scelta sono:");
+        //Console.WriteLine("Gli eventi disponibili nella data scelta sono:");
         List<Evento> listaEventiFiltrati = new List<Evento>();
         foreach (Evento evento in Eventi)
         {

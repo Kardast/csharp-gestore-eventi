@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using System.Collections.Generic;
 using System.Data;
 using System.Runtime.ConstrainedExecution;
 
@@ -15,12 +16,24 @@ Console.WriteLine("Hello, World!");
 //\n carattere di terminazione di una linea string
 
 
-Console.WriteLine("Seleziona l'azione");
-Console.WriteLine("1: Aggiungi evento");
-Console.WriteLine("2: Prenota posti");
-Console.WriteLine("3: Ricerca eventi per data");
-Console.WriteLine("4: Disdici prenotazioni");
-int action = Convert.ToInt32(Console.ReadLine());
+//snippet per date
+//DateTime data = new DateTime(2022, 11, 9);
+
+//if (DateTime.Today == data)
+//{
+//    Console.WriteLine("Data uguale");
+//}
+
+//if (DateTime.Today < data)
+//{
+//    Console.WriteLine("Data futura");
+//}
+
+//if (DateTime.Today > data)
+//{
+//    Console.WriteLine("Data passata");
+//}
+
 
 ProgrammaEventi programmaEventi = new ProgrammaEventi("Programma Eventi");
 
@@ -28,9 +41,41 @@ programmaEventi.AggiungiEvento(new Evento("concerto di Ika", DateOnly.Parse("24/
 programmaEventi.AggiungiEvento(new Evento("concerto di Sandro", DateOnly.Parse("27/03/2023"), 80));
 programmaEventi.AggiungiEvento(new Evento("concerto di Paolo", DateOnly.Parse("24/03/2023"), 150));
 
+void funzioneCase()
+{
+    Console.WriteLine("Vuoi fare altro? [si/no]");
+    string inputUno = Console.ReadLine();
+    if (inputUno == "si")
+    {
+        gestoreCasi();
+    }
+}
 
 try
 {
+    gestoreCasi();
+    //Console.WriteLine(evento1.ToString());
+}
+catch (GestoreEventiException e)
+{
+    Console.WriteLine(e.ToString());
+}
+
+void gestoreCasi()
+{
+    Console.WriteLine("Seleziona l'azione");
+    Console.WriteLine("1: Aggiungi evento");
+    Console.WriteLine("2: Prenota posti");
+    Console.WriteLine("3: Ricerca eventi per data");
+    Console.WriteLine("4: Disdici prenotazioni");
+    Console.WriteLine("5: Visualizza tutti gli eventi");
+    Console.WriteLine("6: Visualizza numero totale di eventi");
+    Console.WriteLine("7: Svuota la lista eventi");
+    Console.WriteLine("8: Stampa un programma eventi");
+
+
+    int action = Convert.ToInt32(Console.ReadLine());
+
     switch (action)
     {
         case 1:
@@ -46,8 +91,9 @@ try
 
             Evento newEvento = new Evento(nomeEvento, dataEvento, postiMaxEvento);
             programmaEventi.AggiungiEvento(newEvento);
-            Console.WriteLine("nome evento: {0} \n data evento {1} \n numero posti max: {2} \n posti prenotati: {3} \n posti rimanenti: {4}", newEvento.Titolo, newEvento.Data, newEvento.PostiMax, newEvento.PostiPrenotati, (newEvento.PostiMax - newEvento.PostiPrenotati));
+            Console.WriteLine("nome evento: {0} \n data evento: {1} \n numero posti max: {2} \n posti prenotati: {3} \n posti rimanenti: {4}", newEvento.Titolo, newEvento.Data, newEvento.PostiMax, newEvento.PostiPrenotati, (newEvento.PostiMax - newEvento.PostiPrenotati));
 
+            funzioneCase();
             break;
 
         case 2:
@@ -66,9 +112,10 @@ try
                 if (ricercaEvento == evento.Titolo)
                 {
                     evento.PrenotaPosti(postiDaPrenotare);
-                    Console.WriteLine("nome evento: {0} \n data evento {1} \n numero posti max: {2} \n posti prenotati: {3} \n posti rimanenti: {4}", evento.Titolo, evento.Data, evento.PostiMax, evento.PostiPrenotati, (evento.PostiMax - evento.PostiPrenotati));
+                    Console.WriteLine("nome evento: {0} \n data evento: {1} \n numero posti max: {2} \n posti prenotati: {3} \n posti rimanenti: {4}", evento.Titolo, evento.Data, evento.PostiMax, evento.PostiPrenotati, (evento.PostiMax - evento.PostiPrenotati));
                 }
             }
+            funzioneCase();
             break;
 
         case 3:
@@ -76,6 +123,7 @@ try
             Console.WriteLine("Inserisci data evento (gg/mm/yyyy)");
             DateOnly dataRicerca = DateOnly.Parse((Console.ReadLine()));
             programmaEventi.ListaEventiPerData(dataRicerca);
+            funzioneCase();
             break;
 
         case 4:
@@ -106,7 +154,7 @@ try
                             else
                             {
                                 evento.DisdiciPosti(postiDaDisdire);
-                                Console.WriteLine("nome evento: {0} \n data evento {1} \n numero posti max: {2} \n posti prenotati: {3} \n posti rimanenti: {4}", evento.Titolo, evento.Data, evento.PostiMax, evento.PostiPrenotati, (evento.PostiMax - evento.PostiPrenotati));
+                                Console.WriteLine("nome evento: {0} \n data evento: {1} \n numero posti max: {2} \n posti prenotati: {3} \n posti rimanenti: {4}", evento.Titolo, evento.Data, evento.PostiMax, evento.PostiPrenotati, (evento.PostiMax - evento.PostiPrenotati));
                             }
                         }
                         else
@@ -117,14 +165,31 @@ try
                     }
                 }
             }
+            funzioneCase();
+            break;
 
+        case 5:
+            //lista totale eventi
+            ProgrammaEventi.ListaEventi(programmaEventi.Eventi);
+            funzioneCase();
+            break;
+
+        case 6:
+            //conta eventi
+            programmaEventi.NumeroEventi();
+            funzioneCase();
+            break;
+
+        case 7:
+            //svuota lista
+            programmaEventi.SvuotaLista();
+            funzioneCase();
+            break;
+
+        case 8:
+            //programma eventi
+            programmaEventi.NomeProgrammaEventi(programmaEventi);
+            funzioneCase();
             break;
     }
-
-    //Console.WriteLine(evento1.ToString());
-
-}
-catch (GestoreEventiException e)
-{
-    Console.WriteLine(e.ToString());
 }
